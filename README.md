@@ -10,3 +10,6 @@ Parse and dump the signals from a signal_xxx.wmedf file
 ## event.py
 Resolve RespEventID-s found in a event_xxx.xml file
 
+## config.py
+Resolve DeviceEventID-s (configuration of the device) found in a event_xxx.xml file
+

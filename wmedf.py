@@ -25,6 +25,7 @@ def parse_header(buffer):
     print("Recording information: " + recording_information)
     print("Start date: " + start_date)
     print("Start time: " + start_time)
+    print("Timestamp:" + str(startts))
     print("Header length: " + header_length)
     print("Reserved: " + reserved)
     print("Number of data records: " + number_of_data_records)
@@ -67,24 +68,33 @@ def parse_header(buffer):
             raise Exception("Digital range not handled")
 
 
-    print("Signal names: ", (signal_names))
-    print("Transducer types: ", (transducer_types))
-    print("Physical dimensions: ", (physical_dimensions))
-    print("Physical minima: ", (physical_minima))
-    print("Physical maxima: ", (physical_maxima))
-    print("Digital minima: ", (digital_minima))
-    print("Digital maxima: ", (digital_maxima))
-    print("Prefiltering: ", (prefiltering))
-    print("Number of samples in each data record: ", (number_of_samples_in_each_data_record))
-    print("Reserved: ", (reserved))
+        print("Signal name       : ", (signal_names[i]))
+        print("Transducer type   : ", (transducer_types[i]))
+        print("Physical dimension: ", (physical_dimensions[i]))
+        print("Physical minima   : ", (physical_minima[i]))
+        print("Physical maxima   : ", (physical_maxima[i]))
+        print("Digital minima    : ", (digital_minima[i]))
+        print("Digital maxima    : ", (digital_maxima[i]))
+        print("Prefiltering      : ", (prefiltering[i]))
+        print("Number of samples in each data record: ", (number_of_samples_in_each_data_record[i]))
+        print("Reserved          : ", (reserved[i]))
+        print("")
 
-    print(pos)
-    number_of_data_records = 10000
+
+    if int(number_of_data_records) == -1:
+        bytes = 0
+        for i in range(0, number_of_signals):
+            bytes += int(number_of_samples_in_each_data_record[i]) * signal_bytes[i]
+        number_of_data_records = (len(buffer) - int(header_length)) /  bytes
+    
     for k in range(0, int(number_of_data_records)):
         for i in range(0, number_of_signals):
             for j in range(0, int(number_of_samples_in_each_data_record[i])):
                 if (signal_bytes[i] == 1):
-                    signal_data[i].append(int.from_bytes(buffer[pos:pos+signal_bytes[i]], byteorder='big', signed=False))
+                    if int(digital_minima[i]) >= 0:
+                        signal_data[i].append(int.from_bytes(buffer[pos:pos+signal_bytes[i]], byteorder='big', signed=False))
+                    else:
+                        signal_data[i].append(int.from_bytes(buffer[pos:pos+signal_bytes[i]], byteorder='big', signed=True))
                 elif (signal_bytes[i] == 2):
                     signal_data[i].append(int.from_bytes(buffer[pos:pos+signal_bytes[i]], byteorder='big', signed=True))
                 else:

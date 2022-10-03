@@ -131,7 +131,7 @@ def main():
         Ahi_including_cH = OAhi + CAhi + (UAhi if UAhi > 0 else 0)
 
         print("")
-        print("Day %s (%s)" % (ts_to_date(timestamp), format_ts(timestamp)))
+        print("Day %s (%s)"  % (ts_to_date(timestamp), format_ts(timestamp)))
         print("  mode                : %s" % get_parameter(cfg, 'Mode'))
         print("  pressure            : %.1f cmH2O" % get_parameter(cfg, 'Pressure'))
         print("  pressure max        : %.1f cmH2O" % get_parameter(cfg, 'PressureMax'))
